@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_vit_product_request_hide_vendor_vit_product_request_hide_vendor,vit_product_request_hide_vendor.vit_product_request_hide_vendor,model_vit_product_request_hide_vendor_vit_product_request_hide_vendor,,1,0,0,0

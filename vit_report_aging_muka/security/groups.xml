@@ -1,0 +1,15 @@
+<odoo>
+   <data noupdate="0">
+   	<record id="group_report" model="res.groups">
+    	<field name="name">Report Aging Menu</field>
+    </record>
+
+    <record id="group_manager" model="res.groups">
+    	<field name="name">Report Aging Manager</field>
+    </record>
+        
+    <record id="group_user" model="res.groups">
+    	<field name="name">Report Aging User</field>
+    </record>
+   </data>
+</odoo>

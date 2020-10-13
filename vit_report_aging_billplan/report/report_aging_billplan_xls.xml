@@ -1,0 +1,9 @@
+<odoo>
+	<report 
+        id="report_vit_project_billplan_bill_plan_menu_xlsx" 
+        string="Report Billplan Excel"
+        model="vit_project_billplan.bill_plan" 
+        report_type="xlsx" 
+        file="vit_report_aging_billplan.bill_plan_xlsx"
+        name="vit_report_aging_billplan.bill_plan_xlsx" />
+</odoo>

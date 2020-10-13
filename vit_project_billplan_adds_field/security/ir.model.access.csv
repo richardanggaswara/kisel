@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_vit_project_billplan_adds_field_vit_project_billplan_adds_field,vit_project_billplan_adds_field.vit_project_billplan_adds_field,model_vit_project_billplan_adds_field_vit_project_billplan_adds_field,,1,0,0,0

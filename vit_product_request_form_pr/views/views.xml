@@ -1,0 +1,21 @@
+<odoo>
+    <data>
+        <record id="inherit_button" model="ir.ui.view">    
+            <field name="name">inherit_button</field>    
+            <field name="model">vit.product.request</field>    
+            <field name="inherit_id" ref="vit_product_request.view_product_request_form"/>    
+            <field name="arch" type="xml">        
+                <xpath expr="//sheet/group/group/field[@name='payment_term_id']" position="after">
+                    <field name="description" string="Description"/>
+                </xpath>
+                <xpath expr="//sheet/group/group/field[@name='user_id']" position="after">
+                    <field name="requesto_id" string="Request To" context="{'group_by':'user_id'}"/>
+                </xpath>
+                <xpath expr="//sheet/group/group/field[@name='company_id']" position="replace"/>
+                <field name="date" position="before">
+                    <field name="company_id" options="{'no_create':True,'no_open':True}"/>
+                </field>
+            </field>
+        </record>        
+    </data>
+</odoo>

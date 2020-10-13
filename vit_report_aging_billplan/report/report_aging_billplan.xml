@@ -1,0 +1,124 @@
+<odoo>
+ <report 
+        id="report_vit_project_billplan_bill_plan_menu" 
+        string="Report Billplan"
+        model="vit_project_billplan.bill_plan" 
+        report_type="qweb-pdf" 
+        file="vit_project_billplan.bill_plan"
+        name="vit_project_billplan.vit_project_billplan_bill_plan_report" />
+
+<template id="vit_project_billplan.vit_project_billplan_bill_plan_report_document">
+    <t t-call="web.external_layout">
+         <div class="page">
+            <h2>Report Billplan</h2>
+        </div>
+        <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th><span>ID Project</span></th>
+                    <th><span>Tanggal Periode</span></th>
+                    <th><span>Unit</span></th>
+                    <th><span>Wilayah</span></th>
+                    <th><span>Bisnis</span></th>
+                    <th><span>Jenis Project</span></th>
+                    <th><span>Customer</span></th>
+                    <th><span>Afiliasi</span></th>
+                    <th><span>Nomor Billplan</span></th>
+                    <th><span>Reference</span></th>
+                    <th><span>Tanggal Billplan</span></th>
+                    <th><span>Rencana Penagihan</span></th>
+                    <th><span>Description Fase</span></th>
+                    <th><span>Nilai Revenue</span></th>
+                    <th><span>Nilai ID Project</span></th>
+                    <th><span>Sisa ID Project</span></th>
+                    <th><span>Nomor BAUT</span></th>
+                    <th><span>Tanggal BAUT</span></th>
+                    <th><span>Nomor BAST</span></th>
+                    <th><span>Tanggal BAST</span></th>
+                    <th><span>Status Fase</span></th>
+                    <th><span>Umur Billplan(Days)</span></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                <!-- <tr t-foreach="request.env['project.project'].search([])" t-as="line"> -->
+                    <td><span t-esc="doc.name"/></td>
+                    <td><span t-esc="doc.date"/></td>
+                    <td><span t-esc="doc.unit_id.name"/></td>
+                    <td><span t-esc="doc.analytic_tag_ids.name"/></td>
+                    <td><span t-esc="doc.analytic_tag_ids_b.name"/></td>
+                    <td><span t-esc="doc.project_id.project_type_id.name"/></td>
+                    <td><span t-esc="doc.project_id.partner_id.name"/></td>
+                    <td>
+                        <t t-if="'Telkomsel' in doc.project_id.partner_id.name">
+                            <span>Telkomsel</span>
+                        </t>
+                        <t t-if="not('Telkomsel' in doc.project_id.partner_id.name)">
+                            <span>Non Telkomsel</span>
+                        </t>
+                        <t t-if="doc.project_id.partner_id.name == ''">
+                            <span></span>
+                        </t>
+                    </td>
+                    <td><span t-esc="[doc.analytic_account_id.name]"/><span t-esc="doc.project_id.name"/>-<span t-esc="doc.analytic_account_id.partner_id.name"/></td>
+                    <td><span t-esc="doc.reference"/></td>
+                    <td><span t-esc="doc.date"/></td>
+                    <td><span t-esc="doc.plan_date"/></td>
+                    <td><span t-esc="doc.description"/></td>
+                    <td><t t-set="x" t-value="doc.amount"/>Rp <span t-esc="'{0:,.2f}'.format(x)"/></td>
+                    <td><t t-set="y" t-value="doc.project_id.total_revenue"/>Rp <span t-esc="'{0:,.2f}'.format(y)"/></td>
+                    <td><t t-set="z" t-value="y-x"/>Rp <span t-esc="'{0:,.2f}'.format(z)"/></td>
+                    <td><span t-esc="doc.no_baut"/></td>
+                    <td><span t-esc="doc.baut_date"/></td>
+                    <td><span t-esc="doc.no_bast"/></td>
+                    <td><span t-esc="doc.bast_date"/></td>
+                    <td>
+                        <t t-if="doc.state == 'open'">
+                            <span>Fase 1</span>
+                        </t>
+                        <t t-if="doc.no_baut is False">
+                            <t t-if="doc.state == 'baut'">
+                                <span>Fase 1</span>
+                            </t>
+                        </t>
+                        <t t-if="doc.no_baut is True">
+                            <t t-if="doc.state == 'baut'">
+                                <span>Fase 2</span>
+                            </t>
+                        </t>
+                        <t t-if="doc.no_bast is False">
+                            <t t-if="doc.state == 'bast'">
+                                <span>Fase 2</span>
+                            </t>
+                        </t>
+                        <t t-if="doc.no_bast is False">
+                            <t t-if="doc.state == 'close'">
+                                <span>Fase 2</span>
+                            </t>
+                        </t>
+                        <t t-if="doc.no_bast is True">
+                            <t t-if="doc.state == 'bast'">
+                                <span>Fase 3</span>
+                            </t>
+                        </t>
+                        <t t-if="doc.no_bast is True">
+                            <t t-if="doc.state == 'close'">
+                                <span>Fase 3</span>
+                            </t>
+                        </t>
+                    </td>
+                    <td><span/></td>
+                </tr>
+            </tbody>
+        </table>
+    </t>
+</template>
+<template id="vit_project_billplan.vit_project_billplan_bill_plan_report">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="doc">
+            <t t-set="lang" t-value="doc.create_uid.lang"/>
+            <t t-call="vit_project_billplan.vit_project_billplan_bill_plan_report_document" />
+        </t>
+    </t>
+</template>
+</odoo>

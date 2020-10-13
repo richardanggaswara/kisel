@@ -1,0 +1,27 @@
+<odoo>
+  <data>
+    <record id="inherit_button" model="ir.ui.view">    
+      <field name="name">inherit_button</field>    
+      <field name="model">vit.product.request</field>    
+      <field name="inherit_id" ref="vit_product_request.view_product_request_form"/>    
+      <field name="arch" type="xml">        
+          <xpath expr="//button[@name='action_create_pr']" position="replace">            
+              <button string="Create Bid" type="object" name="action_create_pr_baru"
+						 	states="open" groups="purchase.group_purchase_manager"/>      
+          </xpath>   
+      </field>
+    </record>
+
+    <record id="inherit_button_po" model="ir.ui.view">    
+      <field name="name">inherit_button</field>    
+      <field name="model">vit.product.request</field>    
+      <field name="inherit_id" ref="vit_product_request.view_product_request_form"/>    
+      <field name="arch" type="xml">        
+          <xpath expr="//button[@name='action_create_po']" position="replace">
+              <button string="Create RfQ" type="object" name="action_create_po_baru"
+						 	states="open" groups="purchase.group_purchase_manager"/>
+          </xpath>   
+      </field>
+    </record>
+  </data>
+</odoo>

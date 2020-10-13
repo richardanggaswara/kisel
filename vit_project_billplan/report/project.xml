@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- report qweb view -->
+        <report id="report_project_project_menu" string="Vit project billplan - Project"
+         model="project.project" report_type="qweb-pdf" 
+         file="project.project"  name="vit_project_billplan.project_project_report" />
+
+        <!-- document template -->
+        <template id="vit_project_billplan.project_project_report_document" >
+            <t t-call="web.external_layout">
+                <t t-set="doc" t-value="doc.with_context({'lang': lang})"/>
+                <div class="page">
+                    <h2>
+                        Project: <span t-field="doc.name"/>
+                    </h2>
+                    <div class="row mt32 mb32">
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Billplan count</strong>
+                            <p class="m-0" t-field="doc.billplan_count" />
+                        </div>
+                    </div>
+                </div>
+                <div class="oe_structure"/>
+                <h2>Billplans</h2>
+                <table class="table table-sm o_main_table" name="billplan_ids_table">
+                    <thead>
+                        <tr>
+                            <td>Name</td>
+                            <td>Date</td>
+                            <td>Plan date</td>
+                            <td>Baut date</td>
+                            <td>Bast date</td>
+                            <td>Amount</td>
+                            <td>Reference</td>
+                            <td>Project</td>
+                            <td>Analytic account</td>
+                            <td>Department</td>
+                            <td>Lokasi</td>
+                            <td>Bisnis</td>
+                        </tr>
+                    </thead>
+                    <tbody class="billplan_ids_tbody">
+                        <tr t-foreach="doc.billplan_ids" t-as="line">
+                            <td><span t-field="line.name" /></td>
+                            <td><span t-field="line.date" /></td>
+                            <td><span t-field="line.plan_date" /></td>
+                            <td><span t-field="line.baut_date" /></td>
+                            <td><span t-field="line.bast_date" /></td>
+                            <td><span t-field="line.amount" /></td>
+                            <td><span t-field="line.reference" /></td>
+                            <td><span t-field="line.project_id" /></td>
+                            <td><span t-field="line.analytic_account_id" /></td>
+                            <td><span t-field="line.department_id" /></td>
+                            <td><span t-field="line.lokasi_id" /></td>
+                            <td><span t-field="line.bisnis_id" /></td>
+                        </tr> <!-- foreach-->
+                    </tbody>
+                </table>
+                <div class="oe_structure"/>
+            </t>
+        </template>
+
+        <!-- main template -->
+        <template id="vit_project_billplan.project_project_report">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-set="lang" t-value="doc.create_uid.lang"/>
+                    <t t-call="vit_project_billplan.project_project_report_document" />
+                </t>
+            </t>
+        </template>
+
+    </data>
+</odoo>

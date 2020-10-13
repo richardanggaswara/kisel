@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_vit_report_billplan_fixer_vit_report_billplan_fixer,vit_report_billplan_fixer.vit_report_billplan_fixer,model_vit_report_billplan_fixer_vit_report_billplan_fixer,,1,0,0,0

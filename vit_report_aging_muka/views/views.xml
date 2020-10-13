@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_uudp_report_aging_form" model="ir.ui.view">
+      <field name="name">Aged Advance</field>
+      <field name="model">vitreport.agingmuka</field>
+      <field name="type">form</field>
+      <field name="priority" eval="8"/>
+      <field name="arch" type="xml">
+        <form string="Aged Advance" create="true">
+            <header>
+<!--               <field name="file_name" invisible="1"/>
+              <field name="excel_file" filename="file_name" invisible="1"/>
+ -->          <button string="Print" states="done" type="object" class="oe_highlight" name="print_report_aging" invisible="1"/>
+              <!-- <button string="Export(XLSX)" name="generate_excel_report" type="object" class="oe_highlight" invisible="1"/> -->
+              <button string="Done" states="draft" type="object" name="action_done" class="oe_highlight"/>
+              <button string="Cancel" states="done" type="object" name="action_cancel" groups="vit_bilyet_giro.group_manager"/>
+              <field name="state" widget="statusbar"/>
+            </header>
+            <sheet>
+                <div class="oe_title">
+                    <h1>Aged Advance</h1>              
+                </div>
+                <group>
+                  <field name="company_id"/>
+                  <field name="date_from"/>
+                </group>
+                <group>
+                  <field name="coa_debit"/>
+                  <field name="notes" placeholder="Add a note"/>
+                </group>
+                <group>
+                  <!-- <field name="journal_ids" widget="many2many_tags" options="{'no_create': True}"/> -->
+                  <field name="company_id" options="{'no_create': True}" groups="base.group_multi_company"/>
+                </group>
+                <!-- <div>
+                  <field name="journal_entry_ids">
+                    <tree editable="bottom">
+                        <field name="date"/>
+                        <field name="name"/>
+                        <field name="partner_id"/>
+                        <field name="ref"/>
+                        <field name="journal_id"/>
+                        <field name="amount" string="Not Due"/>
+                        <field name="amount" sum="Total Amount"/>
+                        <field name="state" invisible="1"/>
+                    </tree>
+                  </field>
+                </div> -->
+            </sheet>
+          </form>
+      </field>
+    </record>
+    <record id="action_uudp_report_aging_tree" model="ir.ui.view">
+      <field name="name">Aged Advance</field>
+      <field name="model">vitreport.agingmuka</field>
+      <field name="type">tree</field>
+      <field name="priority" eval="8"/>
+      <field name="arch" type="xml">
+        <tree string="Aged Advance" create="true">
+          <field name="company_id"/>
+          <field name="date_from"/>
+          <field name="coa_debit"/>
+          <field name="notes"/>
+        <!--   <field name="date"/>
+          <field name="partner_id"/>
+          <field name="ref"/>
+          <field name="journal_id"/>
+          <field name="amount" string="Not Due"/>
+          <field name="amount" sum="Total Amount"/>
+          <field name="state" invisible="1"/> -->
+        </tree>
+      </field>
+    </record>
+    <record model="ir.actions.act_window" id="action_uudp_report_aging">
+      <field name="name">Aged Advance</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">vitreport.agingmuka</field>
+      <field name="view_mode">tree,form</field>
+      <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to add an UUDP pencairan batches
+                </p>
+            <p>klik tombol create untuk menambahkan UUDP pencairan Batches</p>
+            </field>
+    </record>
+
+    <menuitem id="uudp_aging"
+        name="Report Aging"
+        parent="vit_uudp.uudp_home"
+        action="action_uudp_report_aging"
+        sequence="6"
+        groups="vit_uudp.group_user_uudp_user"/>
+</odoo>

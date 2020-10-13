@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+accessvit_report_agingmuka,access_vitreport_agingmuka,model_vitreport_agingmuka,group_manager,1,1,1,1
+accessvit_report_agingmuka,access_vitreport_agingmuka,model_vitreport_agingmuka,group_user,1,1,1,1

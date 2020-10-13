@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- report qweb view -->
+        <report
+            id="report_project_project_menu"
+            string="Vit RAB Printout"
+            model="project.project"
+            report_type="qweb-pdf" 
+            file="project.project"
+            name="vit_project_rab_printout.project_project_report" />
+
+        <template id="vit_project_rab_printout.project_project_report">
+            <t t-call="web.html_container">
+                <t t-call="vit_project_rab_printout.external_layout_project_new" >
+                    <t t-foreach="docs" t-as="doc">
+                        <!-- <t t-set="lang" t-value="doc.create_uid.lang"/> -->
+                        <t t-call="vit_project_rab_printout.project_project_report_document" />
+                    </t>
+                </t>
+            </t>
+        </template>
+
+        <!-- document template -->
+        <template id="vit_project_rab_printout.project_project_report_document" >
+            <!-- <t t-call="web.external_layout_project_new">
+                <t t-set="doc" t-value="doc.with_context({'lang': lang})"/> -->
+                <div class="page">
+                    <h4 style="text-align: center;">
+                        DOKUMEN PERSETUJUAN BISNIS DAN PENGAJUAN BIAYA (RUTIN/NEW BUSINESS)
+                    </h4>
+                    <h4 style="text-align: center;">
+                        <span t-field="doc.name"/>
+                    </h4>
+                    <div style="margin-top: 7%;border-color: transparent;background: none; border: none;">
+                        <div>
+                            <table>
+                                <tr>
+                                    <td>Wilayah</td>
+                                    <td> : <span t-field="doc.analytic_tag_ids" /></td> 
+                                </tr>
+                                <tr>
+                                    <td>Bisnis</td>
+                                    <td> : <span t-field="doc.department_id" /></td>
+                                </tr>
+                                <tr>
+                                    <td>Pekerjaan</td>
+                                    <td> : <span t-field="doc.name" /></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <table style="empty-cells: show; table-layout: fixed;background: none;border: 1px solid #CCC;width:100%; text-align: left; padding: 0px;" class="table" name="revenue_ids_table">
+                    <thead>
+                        <tr>
+                            <th style="border: 1px solid black;width:8%;"><strong>No.</strong></th>
+                            <th style="border: 1px solid black;"><strong>ITEM</strong></th>
+                            <th style="border: 1px solid black;width:12%;"><strong>JUMLAH</strong></th>
+                            <!-- <td>VOLUME</td> -->
+                            <th style="border: 1px solid black;"><strong>TOTAL</strong></th>
+                            <th style="border: 1px solid black;"><strong>HARGA</strong></th>
+                            <th style="border: 1px solid black;"><strong>KETERANGAN</strong></th>
+                        </tr>
+                    </thead>
+                    <tbody class="revenue_ids_tbody">
+                        <tr>
+                            <td style="border: 1px solid black;"><strong>I</strong></td>
+                            <td style="border: 1px solid black;" colspan="4"><strong>PENDAPATAN</strong></td>
+                            <td style="border: 1px solid black;"></td>
+                        </tr>
+                        <t t-set="x" t-value="1"/>
+                        <tr t-foreach="doc.revenue_ids" t-as="line">
+                            <td style="border: 1px solid black;"><span t-esc="x"/></td>
+                            <t t-set="x" t-value="x+1"/>
+                            <td style="border: 1px solid black;"><span t-field="line.product" /></td>
+                            <td style="border: 1px solid black; text-align:center;"><span t-esc="round(line.quantity)" /></td>
+                            <td style="border: 1px solid black; text-align:right; word-wrap:break-word;">Rp <span t-esc="'{0:,.2f}'.format(line.amount)" /></td>
+                            <td style="border: 1px solid black; text-align:right; word-wrap:break-word;">Rp <span t-esc="'{0:,.2f}'.format(line.amount_total)" /></td>
+                            <td style="border: 1px solid black;"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" style="text-align: center; border: 1px solid black;"><strong>JUMLAH</strong></td>
+                            <td style="border: 1px solid black; text-align:right; word-wrap:break-word;">Rp <span t-esc="'{0:,.2f}'.format(doc.total_revenue)"/></td>
+                            <td style="border: 1px solid black;"></td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black;"><strong>II</strong></td>
+                            <td style="border: 1px solid black;" colspan="4"><strong>HPP</strong></td>
+                            <td style="border: 1px solid black;"></td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black;"><strong>II.1</strong></td>
+                            <td style="border: 1px solid black;" colspan="4"><strong>HPP Material</strong></td>
+                            <td style="border: 1px solid black;"></td>
+                        </tr>
+                        <t t-set="i" t-value="1"/>
+                        <tr t-foreach="doc.cogs_material_ids" t-as="line">
+                            <td style="border: 1px solid black;"><span t-esc="i"/></td>
+                            <t t-set="i" t-value="i+1"/>
+                            <td style="border: 1px solid black;"><span t-field="line.product" /></td>
+                            <td style="border: 1px solid black; text-align:center;"><span t-esc="round(line.quantity)" /></td>
+                            <td style="border: 1px solid black; text-align:right; word-wrap:break-word;">Rp <span t-esc="'{0:,.2f}'.format(line.amount)" /></td>
+                            <td style="border: 1px solid black; text-align:right; word-wrap:break-word;">Rp <span t-esc="'{0:,.2f}'.format(line.amount_total)" /></td>
+                            <td style="border: 1px solid black;"></td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black;"><strong>II.2</strong></td>
+                            <td style="border: 1px solid black;" colspan="4"><strong>HPP Operational</strong></td>
+                            <td style="border: 1px solid black;"></td>
+                        </tr>
+                        <t t-set="j" t-value="1"/>
+                        <tr t-foreach="doc.cogs_operational_ids" t-as="line">
+                            <td style="border: 1px solid black;"><span t-esc="j"/></td>
+                            <t t-set="i" t-value="j+1"/>
+                            <td style="border: 1px solid black;"><span t-field="line.product" /></td>
+                            <td style="border: 1px solid black; text-align:center;"><span t-esc="round(line.quantity)" /></td>
+                            <td style="border: 1px solid black; text-align:right; word-wrap:break-word;">Rp <span t-esc="'{0:,.2f}'.format(line.amount)" /></td>
+                            <td style="border: 1px solid black; text-align:right; word-wrap:break-word;">Rp <span t-esc="'{0:,.2f}'.format(line.amount_total)" /></td>
+                            <td style="border: 1px solid black;"></td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black;"><strong>II.3</strong></td>
+                            <td style="border: 1px solid black;" colspan="4"><strong>HPP Service</strong></td>
+                            <td style="border: 1px solid black;"></td>
+                        </tr>
+                        <t t-set="k" t-value="1"/>
+                        <tr t-foreach="doc.cogs_service_ids" t-as="line">
+                            <td style="border: 1px solid black;"><span t-esc="k"/></td>
+                            <t t-set="k" t-value="i+1"/>
+                            <td style="border: 1px solid black;"><span t-field="line.product" /></td>
+                            <td style="border: 1px solid black; text-align:center;"><span t-esc="round(line.quantity)" /></td>
+                            <td style="border: 1px solid black; text-align:right; word-wrap:break-word;">Rp <span t-esc="'{0:,.2f}'.format(line.amount)" /></td>
+                            <td style="border: 1px solid black; text-align:right; word-wrap:break-word;">Rp <span t-esc="'{0:,.2f}'.format(line.amount_total)" /></td>
+                            <td style="border: 1px solid black;"></td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black;"><strong>II.4</strong></td>
+                            <td style="border: 1px solid black;" colspan="4"><strong>HPP Personel</strong></td>
+                            <td style="border: 1px solid black;"></td>
+                        </tr>
+                        <t t-set="l" t-value="1"/>
+                        <tr t-foreach="doc.cogs_labour_ids" t-as="line">
+                            <td style="border: 1px solid black;"><span t-esc="l"/></td>
+                            <t t-set="l" t-value="i+1"/>
+                            <td style="border: 1px solid black;"><span t-field="line.product" /></td>
+                            <td style="border: 1px solid black; text-align:center;"><span t-esc="round(line.quantity)" /></td>
+                            <td style="border: 1px solid black; text-align:right; word-wrap:break-word;">Rp <span t-esc="'{0:,.2f}'.format(line.amount)" /></td>
+                            <td style="border: 1px solid black; text-align:right; word-wrap:break-word;">Rp <span t-esc="'{0:,.2f}'.format(line.amount_total)" /></td>
+                            <td style="border: 1px solid black;"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" style="text-align: center; border: 1px solid black;"><strong>JUMLAH</strong></td>
+                            <td style="border: 1px solid black; text-align:right; word-wrap:break-word;">Rp <span t-esc="'{0:,.2f}'.format(doc.total_cogs_material + doc.total_cogs_operational + doc.total_cogs_service + doc.total_cogs_labour)"/></td>
+                            <td style="border: 1px solid black;"></td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black; text-align:center;" colspan="2"><strong>GPM</strong></td>
+                            <td style="border: 1px solid black; text-align:center;" colspan="2"><strong><span t-esc="'{0:,.2f}'.format(doc.pct_gpm)" />%</strong></td>
+                            <td style="border: 1px solid black; text-align:right; word-wrap:break-word;">Rp <span t-esc="'{0:,.2f}'.format(doc.total_gpm)" /></td>
+                            <td style="border: 1px solid black;"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div>
+                    <div style="border-color: transparent;background: none; border: none;">
+                        <table style="margin-top:5px;background: none;width:70%; text-align: left; padding: 0px;border: 1px solid black;" class="table" name="time_schedule_ids_table">  
+                            <thead>
+                                <h4>TIME SCHEDULE PENDANAAN</h4>
+                                <tr>
+                                    <td style="border: 1px solid black;"><strong>No.</strong></td>
+                                    <td style="border: 1px solid black;"><strong>ITEM</strong></td>
+                                    <td style="border: 1px solid black;"><strong>JUMLAH</strong></td>
+                                    <td style="border: 1px solid black;"><strong>TOTAL</strong></td>
+                                    <td style="border: 1px solid black;"><strong>TANGGAL KEBUTUHAN</strong></td>           
+                                </tr>
+                            </thead>
+                            <tbody class="time_schedule_ids_tbody">
+                                <t t-set="i" t-value="1"/>
+                                <tr t-foreach="doc.time_schedule_ids" t-as="line">
+                                    <td style="border: 1px solid black;"><span t-esc="i"/></td>
+                                    <t t-set="i" t-value="i+1"/>
+                                    <td style="border: 1px solid black;"><span t-field="line.name" /></td>
+                                    <td style="border: 1px solid black;"><span t-esc="round(line.quantity)" /></td>
+                                    <td style="border: 1px solid black;">Rp <span t-esc="'{0:,.2f}'.format(line.amount)" /></td>
+                                    <td style="border: 1px solid black;"><span t-field="line.date_required" /></td>
+                                </tr> <!-- foreach-->
+                                <tr t-foreach="doc.time_schedule_ids" t-as="line">
+                                    <td style="border: 1px solid black;"></td>
+                                    <td style="border: 1px solid black;" colspan="3"><strong>HARGA</strong></td>
+                                    <td style="border: 1px solid black;">Rp <span t-esc="'{0:,.2f}'.format(line.amount_total)" /></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table style="border-color: transparent;background: none;width:70%; text-align: left; padding: 0px;border: none;">
+                            <tr><td>&#160;</td></tr><tr><td>&#160;</td></tr><tr><td>&#160;</td></tr>
+                            <tr>
+                                <td>Jakarta, <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d/%m/%Y')"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Dibuat oleh,</strong></td>
+                                <td style="text-align:center;"><strong>Diverifikasi oleh,</strong></td>
+                            </tr>
+                            <tr><td>&#160;</td></tr><tr><td>&#160;</td></tr><tr><td>&#160;</td></tr>
+                            <tr>
+                                <td><strong>(<span t-field="doc.submited"/>)</strong><br/>Manager Business</td>
+                                <td style="text-align:center;"><strong>(<span t-field="doc.reviewed"/>)</strong><br/>GM GS KPU</td>
+                            </tr>
+                            <tr><td>&#160;</td></tr><tr><td>&#160;</td></tr><tr><td>&#160;</td></tr>
+                        </table>
+                        <table style="border-color: transparent;background: none;width:60%; text-align: center; padding: 0px;border: none;">
+                            <tr>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Disetujui oleh,</strong></td>
+                            </tr>
+                            <tr><td>&#160;</td></tr><tr><td>&#160;</td></tr><tr><td>&#160;</td></tr>
+                            <tr>
+                                <td><strong>(<span t-field="doc.approved"/>)</strong><br/>Wakil Ketua I</td>
+                            </tr>
+                        </table>
+                        <table style="border-color: transparent;background: none;width:100%; text-align: left; margin-top: 20%;border: none;">
+                            <tr>
+                                <td>Catatan : <span t-field="doc.notes"/></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            <!-- </t> -->
+        </template>
+        
+        <template id="external_layout_project_new">
+            <div class="article o_report_layout_standard"  t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
+                <t t-call="web.address_layout"/>
+                <t t-raw="0"/>
+            </div>
+        </template>
+        
+    </data>
+</odoo>

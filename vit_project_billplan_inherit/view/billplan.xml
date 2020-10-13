@@ -1,0 +1,64 @@
+<odoo>
+    <data>
+        <record id="view_billplan_so_form" model="ir.ui.view">
+            <field name="name">vit_project_billplan.bill_plan.form</field>
+            <field name="model">vit_project_billplan.bill_plan</field>
+            <field name="inherit_id" ref="vit_project_billplan.view_vit_project_billplan_bill_plan_form"/>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <header position="inside">
+                    <button string="Create SO" class="oe_highlight" type="object" name="action_create_so" states="bast"/>
+                    <button string="Fill Products"  type="object" name="fill_product" />
+                </header>
+
+                <div class="oe_title" position="before">
+                    <div class="oe_button_box" name="button_box">
+                        <button type="object" name="action_view_sale" class="oe_stat_button" icon="fa-pencil-square-o">
+                            <field name="sale_count" widget="statinfo" string="Sale Orders"/>
+                            <field name="sale_ids" invisible="1"/>
+                        </button>
+                    </div>
+                </div>
+                <notebook position="inside">
+                    <page string="Details">
+                        <field name="line_ids">
+                            <tree string="Line" editable="bottom">
+                                <field name="name" />
+                                <field name="product_id" />
+                                <field name="quantity" />
+                                <field name="unit_price" />
+                                <field name="amount" />
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+        <record id="inherit_billplan_form" model="ir.ui.view">    
+            <field name="name">inherit_billplan_form</field>    
+            <field name="model">vit_project_billplan.bill_plan</field>    
+            <field name="inherit_id" ref="vit_project_billplan.view_vit_project_billplan_bill_plan_form"/>
+            <field name="type">form</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <header position="inside">
+                    <!-- <button string="Export Excel" name="export_excel" type="object"  class="btn-primary" icon="fa-table"/> -->
+                    <button name="action_baut" string="BAUT" states="open" type="object"/>
+                    <button name="action_bast" string="BAST" states="baut" type="object"/>
+                    <button name="action_close" string="Confirm" states="bast" type="object"/>
+                    <button name="action_cancel" string="Cancel" states="open,baut,bast" type="object"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <xpath expr="//sheet/group/group[1]/field[@name='baut_date']" position="before">
+                    <field name="no_baut"/>
+                </xpath>
+                <xpath expr="//sheet/group/group[1]/field[@name='bast_date']" position="before">
+                    <field name="no_bast"/>
+                </xpath>
+                <xpath expr="//sheet/group/group[2]/field[@name='bisnis_id']" position="after">
+                    <field name="description"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

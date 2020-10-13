@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="action_export_excel_wizard" model="ir.actions.act_window">
+            <field name="name">Export Excel</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">vit.bill_plan</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <record id="view_export_excel_form" model="ir.ui.view">
+            <field name="name">view_export_excel_form</field>
+            <field name="model">vit.bill_plan</field>
+            <field name="type">form</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <form string="Export Excel" version="7.0">
+                    <p>
+                        Klik tombol Export di bawah untuk mulai export Report.
+                        Report yang diexport adalah Report Aging Billplan yang belum diexport.
+                    </p>
+                    <footer>
+                        <button string="Export" name="export_excel" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel" />
+                    </footer>
+
+                </form>
+            </field>
+        </record>
+
+        <menuitem id="vit_project_billplan.vit_project_billplan_sub_menu_report" 
+                    name="Report Aging Billplan"
+                    parent="vit_project_billplan.vit_project_billplan_top_menu"
+                    action="action_export_excel_wizard"
+                    sequence="60" />
+
+    </data>
+</odoo>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+ <report 
+            id="report_aging_muka" 
+            string="Aged Advance"
+            model="vitreport.agingmuka" 
+            report_type="qweb-pdf" 
+            file="vit_report_aging_muka.aging_muka"  
+            name="vit_report_aging_muka.vit_report_aging_template" />
+
+<template id="vit_report_aging_muka.vit_report_aging_template">
+    <t t-call="web.html_container">
+        <t t-call="vit_report_aging_muka.external_layout_project" >
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="vit_report_aging_muka.report_aging_muka_template_id" />
+            </t>
+        </t>
+    </t>
+</template>
+<template id="vit_report_aging_muka.report_aging_muka_template_id" >
+    <div class="page">
+        <h2>Aged Advance</h2>
+        <h3><span t-esc="doc.company_id.name"/></h3>
+        <div class="row mt32">
+            <div class="col-3">
+                <strong>Date:</strong>
+                <p t-esc="doc.date_from"/>
+            </div>
+            <div class="col-3">
+                <strong>Period Length (days)</strong>
+                <p>15</p>
+            </div>
+        </div>
+        <div class="row mb32">
+            <div class="col-3">
+                <strong>Account:</strong>
+                <p t-esc="doc.coa_debit.name"></p>
+            </div>
+            <div class="col-3">
+                <strong>Notes:</strong>
+                <p t-esc="notes"/>
+            </div>
+        </div>
+        <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th><span>Partners</span></th>
+                    <th><span>JRNL</span></th>
+                    <th><span>Account</span></th>
+                    <th><span>Reference</span></th>
+                    <th><span>Debit</span></th>
+                    <th><span>1-15</span></th>
+                    <th><span>16-30</span></th>
+                    <th><span>Older</span></th>
+                    <th><span>Total</span></th>
+                </tr>
+            </thead>
+            <!-- <t t-set="z" t-value="doc.date_from" t-options='{"%d"}'/> -->
+            <t t-set="x" t-value="0"/><t t-set="o" t-value="0"/><t t-set="p" t-value="0"/><t t-set="q" t-value="0"/><t t-set="r" t-value="0"/>
+            <tbody>
+                <t t-if="obj.debit != 0" t-foreach="request.env['account.move.line'].search([])" t-as="obj">
+                    <t t-if="obj.account_id.name == doc.coa_debit.name">
+                        <tr>
+                            <td class="text-left"><span t-esc="obj.partner_id.display_name"/>,<span t-esc="obj.partner_id.street"/></td>
+                            <td class="text-left"><span t-esc="obj.journal_id.name"/></td>
+                            <td class="text-left"><span t-esc="obj.account_id.name"/></td>
+                            <td class="text-left"><span t-esc="obj.ref"/></td>
+                            <td class="text-left">Rp 
+                                <t t-set="calculate_debit" t-value="obj.debit"/><span t-esc="'{0:,.2f}'.format(obj.debit)"/><t t-set="x" t-value="x+obj.debit"/></td>
+                            <!-- <t t-set="y" t-value="range(15)"/> -->
+                            <!-- <td t-if="z in range(15)" class="text-left">Rp <span t-esc="'{0:,.2f}'.format(obj.amount_residual_currency + (obj.debit * (obj.tax_base_amount/100)))"/></td> -->
+                           <!--  <td class="text-left"><span t-esc="obj.amount_residual_currency"/></td>
+                            <td class="text-left"><span t-esc="obj.tax_base_amount"/></td> -->
+
+                            <td class="text-left">Rp 
+                                <t t-set="calculate_due" t-value="obj.amount_residual_currency + (obj.debit * (obj.tax_base_amount/100))"/><span t-esc="'{0:,.2f}'.format(calculate_due)"/><t t-set="o" t-value="o+calculate_due"/>
+                            </td>
+                            <td class="text-left">Rp 
+                                <t t-set="calculate_due_old" t-value="obj.amount_residual_currency + (obj.debit * (obj.tax_base_amount/100))"/><span t-esc="'{0:,.2f}'.format(calculate_due_old)"/><t t-set="p" t-value="p+calculate_due_old"/>
+                            </td>
+                            <td class="text-left">Rp 
+                                <t t-set="calculate_due_older" t-value="obj.amount_residual_currency + (obj.debit * (obj.tax_base_amount/100))"/>
+                                <span t-esc="'{0:,.2f}'.format(calculate_due_older)" t-set="calculate_due_older"/><t t-set="q" t-value="q+calculate_due_older"/></td>
+                            <td class="text-left">Rp 
+                                <t t-set="total" t-value="calculate_debit + calculate_due + calculate_due_old + calculate_due_older"/>
+                                <span t-esc="'{0:,.2f}'.format(total)"/><t t-set="r" t-value="r+total"/>
+                            </td> 
+                        </tr>
+                    </t>
+                </t>                
+            </tbody>
+            <th><span>TOTAL </span></th>
+            <th></th><th></th>
+            <th><span></span></th>
+            <th><span>Rp <t t-esc="'{0:,.2f}'.format(x)"/></span></th>
+            <th><span>Rp <t t-esc="'{0:,.2f}'.format(o)"/></span></th>
+            <th><span>Rp <t t-esc="'{0:,.2f}'.format(p)"/></span></th>
+            <th><span>Rp <t t-esc="'{0:,.2f}'.format(q)"/></span></th>
+            <th><span>Rp <t t-esc="'{0:,.2f}'.format(r)"/></span></th>
+        </table>
+    </div>
+</template>
+<template id="external_layout_project">
+    <div class="article o_report_layout_standard"  t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
+        <t t-call="web.address_layout"/>
+        <t t-raw="0"/>
+    </div>
+</template>
+</odoo>

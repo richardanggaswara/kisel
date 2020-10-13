@@ -1,0 +1,18 @@
+<odoo>
+    <data>
+        <record id="view_project_billplan_form" model="ir.ui.view">
+            <field name="name">project.project.form</field>
+            <field name="model">project.project</field>
+            <field name="inherit_id" ref="project.edit_project"/>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <div name="button_box" position="inside">
+                    <button type="object" name="action_view_billplan" class="oe_stat_button" icon="fa-pencil-square-o">
+                        <field name="billplan_count" widget="statinfo" string="Bill Plans"/>
+                        <field name="billplan_ids" invisible="1"/>
+                    </button>
+                </div>
+            </field>
+        </record>
+    </data>
+</odoo>

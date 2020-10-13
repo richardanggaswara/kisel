@@ -1,0 +1,29 @@
+<odoo>
+  <data>
+    <record id="inherit_billplan_form" model="ir.ui.view">    
+        <field name="name">inherit_billplan_form</field>    
+        <field name="model">vit_project_billplan.bill_plan</field>    
+        <field name="inherit_id" ref="vit_project_billplan.view_vit_project_billplan_bill_plan_form"/>
+        <field name="type">form</field>
+        <field name="priority" eval="8"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+              <button name="action_baut" string="BAUT" states="open" type="object"/>
+              <button name="action_bast" string="BAST" states="baut" type="object"/>
+              <button name="action_close" string="Confirm" states="bast" type="object"/>
+              <button name="action_cancel" string="Cancel" states="open,baut,bast" type="object"/>
+              <field name="state" widget="statusbar"/>
+            </header>
+          <xpath expr="//sheet/group/group[1]/field[@name='baut_date']" position="before">
+            <field name="no_baut"/>
+          </xpath>
+          <xpath expr="//sheet/group/group[1]/field[@name='bast_date']" position="before">
+            <field name="no_bast"/>
+          </xpath>
+          <xpath expr="//sheet/group/group[2]/field[@name='bisnis_id']" position="after">
+            <field name="description"/>
+          </xpath>
+        </field>
+    </record>
+  </data>
+</odoo>

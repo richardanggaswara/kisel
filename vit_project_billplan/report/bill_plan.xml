@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- report qweb view -->
+        <report id="report_vit_project_billplan_bill_plan_menu" string="Vit project billplan - Bill plan"
+         model="vit_project_billplan.bill_plan" report_type="qweb-pdf" 
+         file="vit_project_billplan.bill_plan"  name="vit_project_billplan.vit_project_billplan_bill_plan_report" />
+
+        <!-- document template -->
+        <template id="vit_project_billplan.vit_project_billplan_bill_plan_report_document" >
+            <t t-call="web.external_layout">
+                <t t-set="doc" t-value="doc.with_context({'lang': lang})"/>
+                <div class="page">
+                    <h2>
+                        Bill plan: <span t-field="doc.name"/>
+                    </h2>
+                    <div class="row mt32 mb32">
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Date</strong>
+                            <p class="m-0" t-field="doc.date" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Plan date</strong>
+                            <p class="m-0" t-field="doc.plan_date" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Baut date</strong>
+                            <p class="m-0" t-field="doc.baut_date" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Bast date</strong>
+                            <p class="m-0" t-field="doc.bast_date" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Amount</strong>
+                            <p class="m-0" t-field="doc.amount" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Reference</strong>
+                            <p class="m-0" t-field="doc.reference" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Project</strong>
+                            <p class="m-0" t-field="doc.project_id"/>
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Analytic account</strong>
+                            <p class="m-0" t-field="doc.analytic_account_id"/>
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Department</strong>
+                            <p class="m-0" t-field="doc.department_id"/>
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Lokasi</strong>
+                            <p class="m-0" t-field="doc.lokasi_id"/>
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Bisnis</strong>
+                            <p class="m-0" t-field="doc.bisnis_id"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="oe_structure"/>
+            </t>
+        </template>
+
+        <!-- main template -->
+        <template id="vit_project_billplan.vit_project_billplan_bill_plan_report">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-set="lang" t-value="doc.create_uid.lang"/>
+                    <t t-call="vit_project_billplan.vit_project_billplan_bill_plan_report_document" />
+                </t>
+            </t>
+        </template>
+
+    </data>
+</odoo>

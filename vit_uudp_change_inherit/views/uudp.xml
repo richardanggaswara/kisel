@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="inherit_pengajuan_form" model="ir.ui.view">    
+        <field name="name">inherit_pengajuan_form</field>    
+        <field name="model">uudp</field>    
+        <field name="inherit_id" ref="vit_uudp.view_uudp_pengajuan_form"/>    
+        <field name="arch" type="xml">          
+            <xpath expr="//notebook/page/group/group/field[@name='coa_debit']" position="before">
+                <field name="journal_entry_id" options='{"no_create": 1}' attrs="{'invisible': [('journal_entry_id','=',False),('type','!=','pengajuan')]}" groups="account.group_account_manager" readonly="1"/>
+            </xpath>
+            <xpath expr="//notebook/page/group/group/field[@name='coa_debit']" position="replace">
+                <field name="coa_debit" domain="[('code','in',['1181101','1181106'])]" attrs="{'readonly':[('state','=','done')]}"  options='{"no_create": 1, "no_open": 1}'/>
+            </xpath>
+            <xpath expr="//sheet/group/group/field[@name='date']" position="replace">
+                <field name="date" attrs="{'readonly': [('state','!=','draft')]}"/>
+            </xpath>
+            <xpath expr="//sheet/group/group/field[@name='end_date']" position="replace">
+                <field name="end_date" attrs="{'readonly': [('state','!=','draft')]}"/>
+            </xpath>
+            <xpath expr="//sheet/group/group/field[@name='journal_entry_id']" position="replace"/>
+            <notebook position="inside">     
+                <page string="Approval Level">
+                    <group>
+                        <field name="reviewed_by"/>
+                        <field name="budgeted_by"/>       
+                        <field name="approved_by"/>       
+                    </group>    
+                </page>
+            </notebook>  
+        </field>
+    </record>    
+    <record id="inherit_penyelesaian_form" model="ir.ui.view">
+        <field name="name">inherit_penyelesaian_form</field>
+        <field name="model">uudp</field>
+        <field name="inherit_id" ref="vit_uudp.view_uudp_penyelesaian_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet/group/group[2]/field[@name='journal_entry_id']" position="replace"/>
+            <xpath expr="//sheet/group/group/field[@name='department_id']" position="after">
+                <field name="vendor" attrs="{'invisible':[('type','!=','reimberse')], 'required': [('type','=','reimberse')]}"/>
+                <field name="description_reimberse" attrs="{'invisible':[('type','!=','reimberse')]}"/>
+            </xpath>
+            <xpath expr="//sheet/group/group[2]/field[@name='tgl_pencairan']" position="after">
+                <field name="prefix_nsfp" attrs="{'invisible':[('type','!=','reimberse')]}"/>
+                <field name="efaktur_pajak" attrs="{'invisible':[('type','!=','reimberse')]}"/>
+                <field name="journal_payment" attrs="{'invisible':[('type','!=','reimberse')], 'required':[('type','=','reimberse')]}"/>
+            </xpath>
+            <xpath expr="//sheet/notebook/page/field[@name='uudp_ids']/tree/field[@name='unit_price']" position="after">
+                <field name="tax_reimberse" widget="many2many_tags"/>
+                <field name="tax_amount" sum="Total Amount"/>
+            </xpath>
+            <xpath expr="//sheet/notebook/page[2]" position="replace">
+                <page string="Information" groups="account.group_account_manager">
+                    <group>
+                        <group>
+                            <field name="by_pass_selisih" attrs="{'readonly':[('state','=','done')]}" invisible="1"/>
+                            <field name="journal_entry_id" options='{"no_create": 1}' groups="account.group_account_manager" readonly="1"/>
+                            <field name="coa_kredit" attrs="{'invisible':[('type','=','pengajuan')], 'required':[('state','=','confirm_finance'),('type','=','penyelesaian')], 'readonly':[('state','=','done')]}" options='{"no_create": 1, "no_open": 1, "no_open": 1}' domain="[('company_id','=',company_id)]"/>
+                            <field name="metode_pengadaan" attrs="{'readonly': [('state','!=','draft')],'invisible': [('type','!=','reimberse')]}" options='{"no_create": 1, "no_open": 1}'/>
+                        </group>
+                        <group>
+                            <field name="metode_pembayaran" attrs="{'readonly': [('state','!=','draft')],'invisible': [('type','!=','reimberse')]}" options='{"no_create": 1, "no_open": 1}'/>
+                            <field name="tahapan_pembayaran" attrs="{'readonly': [('state','!=','draft')],'invisible': [('type','!=','reimberse')]}" options='{"no_create": 1, "no_open": 1}'/>
+                            <field name="cara_perolehan" attrs="{'readonly': [('state','!=','draft')],'invisible': [('type','!=','reimberse')]}" options='{"no_create": 1, "no_open": 1}'/>
+                        </group>
+                    </group>
+                </page>
+                <page string="Approval Level">
+                    <group>
+                        <field name="reviewed_by"/>
+                        <field name="budgeted_by"/>       
+                        <field name="approved_by"/>       
+                    </group>    
+                </page>
+                <page string="Document Checklist" attrs="{'readonly': [('state','!=','draft')],'invisible': [('type','!=','reimberse')], 'required': [('type','=','reimberse')]}" options='{"no_create": 1, "no_open": 1}'>
+                    <group string="Kelengkapan Pengadaan">   
+                        <group>
+                            <field name="justifikasi" />
+                            <field name="pr"/>       
+                            <field name="ssph"/>
+                            <field name="sph"/>
+                            <field name="ba_negosiasi"/>       
+                        </group>
+                        <group>
+                            <field name="disposisi"/>
+                            <field name="surat_penunjukan"/>
+                            <field name="po_spk"/>
+                            <field name="baut_bast"/>
+                            <field name="analisa_bisnis"/>
+                        </group>   
+                    </group>
+                    <group string="Kelengkapan Tagihan">
+                        <field name="tanda_terima"/>
+                        <field name="invoice_tagihan"/>
+                        <field name="kwitansi"/>
+                        <field name="faktur_pajak"/>
+                        <field name="bukti_transaksi"/>
+                        <field name="lpjk"/>
+                        <field name="ktp"/>
+                        <field name="npwp"/>
+                        <field name="lainnya"/>
+                    </group> 
+                </page>
+            </xpath>    
+        </field>
+    </record>
+    <record id="inherit_pencairan_form" model="ir.ui.view">
+        <field name="name">inherit_pencairan_form</field>
+        <field name="model">uudp.pencairan</field>
+        <field name="inherit_id" ref="vit_uudp.view_uudp_pencairan_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet/group/group[2]/field[@name='coa_kredit']" position="replace">
+                <field name="coa_kredit" attrs="{'readonly': [('state','in',('done','cancel','refuse'))]}" domain="[('company_id','=',company_id)]"/>
+            </xpath>
+            <xpath expr="//sheet/group/group[2]/field[@name='journal_entry_id']" position="replace"/>
+            <notebook position="inside">
+                <page string="Information" groups="account.group_account_manager">
+                    <group>
+                        <field name="journal_entry_id" options='{"no_create": 1}' groups="account.group_account_manager" attrs="{'invisible':[('type','!=','once')]}" readonly="1"/>
+                    </group>
+                </page>
+                <page string="Approval Level">
+                    <group>
+                        <field name="reviewed_by"/>
+                        <field name="budgeted_by"/>       
+                        <field name="approved_by"/>       
+                    </group>    
+                </page>
+            </notebook>
+        </field>
+    </record>
+    <menuitem id="vit_uudp.uudp_pencairan_menu"
+            name="UM Pengajuan Pembayaran"
+            parent="vit_uudp.uudp_menu"
+            sequence="2"
+            groups="vit_uudp.group_user_uudp_pencairan,vit_uudp.group_manager_uudp_pencairan"/>
+</odoo>
